@@ -1,0 +1,5 @@
+package com.neyma.serviceoffer.dao.db;
+
+public interface IResponse {
+
+}
