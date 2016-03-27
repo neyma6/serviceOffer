@@ -1,17 +1,16 @@
 package com.neyma.serviceoffer.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.HtmlUtils;
 
 import com.neyma.serviceoffer.dao.facade.RegionAwareFacade;
 import com.neyma.serviceoffer.domain.City;
@@ -33,7 +32,7 @@ public class RegionRestController {
 		List<String> regionNames = new ArrayList<>();
 		
 		for (Region region : regions) {
-			regionNames.add(StringEscapeUtils.escapeHtml4(region.get_id()));
+			regionNames.add((region.get_id()));
 		}
 		
 		return regionNames;
@@ -42,8 +41,6 @@ public class RegionRestController {
 	@RequestMapping(value = "/city", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> getCities(@RequestParam String name) throws UnsupportedEncodingException {
-		
-		System.out.println(StringEscapeUtils.unescapeHtml4(name));
 		
 		List<City> cities = regionAwareFacade.getCities(name);
 		List<String> cityNames = new ArrayList<>();

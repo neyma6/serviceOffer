@@ -1,5 +1,6 @@
 package com.neyma.serviceoffer.config;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.context.support.ConversionServiceFactoryBean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 import com.neyma.serviceoffer.dao.converter.DbUserToUserConverter;
 import com.neyma.serviceoffer.dao.converter.DocumentToCityConverter;
