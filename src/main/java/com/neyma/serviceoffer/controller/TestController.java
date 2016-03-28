@@ -2,9 +2,12 @@ package com.neyma.serviceoffer.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import com.neyma.serviceoffer.dao.db.IPermanentRepository;
 import com.neyma.serviceoffer.dao.db.LocationResponse;
 import com.neyma.serviceoffer.dao.db.RegionRequest;
 import com.neyma.serviceoffer.dao.db.impl.OfferMongoDbRepository;
+import com.neyma.serviceoffer.dao.util.LoadRegionAndCities;
 import com.neyma.serviceoffer.domain.City;
 import com.neyma.serviceoffer.domain.Region;
 
@@ -55,15 +59,18 @@ public class TestController {
 			System.out.println("ret " + ret);
 		}*/
 		
-		/*Resource resource = resourceLoader.getResource("classpath:HU.txt");
+		Resource resource = resourceLoader.getResource("classpath:HU.txt");
 		Map<String, Set<String>> data = LoadRegionAndCities.loadCountyAndCities(resource.getFile());
 		
+		data.remove("Budapest");
+		data.get("Pest").add("Budapest");
+		
 		for (Map.Entry<String, Set<String>> entry : data.entrySet()) {
-			regionRepo.save(entry.getKey());
+			regionRepo.save(new RegionRequest(entry.getKey()));
 			for (String city : entry.getValue()) {
-				cityRepo.save(city, entry.getKey());
+				cityRepo.save(new CityRequest(city, entry.getKey()));
 			}
-		}*/
+		}
 		
 		List<Region> regions = regionRepo.getAll(RegionRequest.EMPTY_REQUEST).getItems();
 		
