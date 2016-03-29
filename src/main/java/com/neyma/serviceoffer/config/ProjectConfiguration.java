@@ -26,6 +26,8 @@ public class ProjectConfiguration {
 
 	public static final String CITY_REPOSITORY = "cityRepository";
 	public static final String REGION_REPOSITORY = "regionRepository";
+	public static final String OFFER_REPOSITORY = "offerRepository";
+	public static final String USER_REPOSITORY = "userRepository";
 	private static final String CONVERSION_SERVICE = "conversionService";
 	
 	@Bean

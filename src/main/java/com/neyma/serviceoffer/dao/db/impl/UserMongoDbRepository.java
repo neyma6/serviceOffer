@@ -1,15 +1,37 @@
 package com.neyma.serviceoffer.dao.db.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import com.neyma.serviceoffer.config.ProjectConfiguration;
+import com.neyma.serviceoffer.dao.db.IDbUserAwareAlteringRepository;
+import com.neyma.serviceoffer.dao.db.UserRequest;
+import com.neyma.serviceoffer.dao.db.UserResponse;
 
-@Service
-public class UserMongoDbRepository {
+@Service(ProjectConfiguration.USER_REPOSITORY)
+public class UserMongoDbRepository implements IDbUserAwareAlteringRepository<UserRequest, UserResponse> {
 
-	@Autowired
-	private ConversionService conversionService;
+	@Override
+	public UserResponse save(UserRequest req) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserResponse update(UserRequest req) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserResponse get(UserRequest req) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserResponse authUser(UserRequest req) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

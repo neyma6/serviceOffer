@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.client.FindIterable;
+import com.neyma.serviceoffer.config.ProjectConfiguration;
 import com.neyma.serviceoffer.dao.db.IDbGetAllSupportAlteringRepository;
 import com.neyma.serviceoffer.dao.db.OfferRequest;
 import com.neyma.serviceoffer.dao.db.OfferResponse;
@@ -17,7 +18,7 @@ import com.neyma.serviceoffer.dao.util.MongoDbUtil;
 import com.neyma.serviceoffer.domain.Offer;
 import com.neyma.serviceoffer.domain.Offer.OfferBuilder;
 
-@Service
+@Service(ProjectConfiguration.OFFER_REPOSITORY)
 public class OfferMongoDbRepository extends AbstractMongoDbRepository 
 	implements IDbGetAllSupportAlteringRepository<OfferRequest, OfferResponse> {
 
