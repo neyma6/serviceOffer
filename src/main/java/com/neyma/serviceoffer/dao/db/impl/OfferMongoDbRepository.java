@@ -9,23 +9,29 @@ import org.bson.Document;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.client.FindIterable;
+import com.neyma.serviceoffer.dao.db.IDbGetAllSupportAlteringRepository;
+import com.neyma.serviceoffer.dao.db.OfferRequest;
+import com.neyma.serviceoffer.dao.db.OfferResponse;
+import com.neyma.serviceoffer.dao.db.OfferResponse.OfferResponseBuilder;
 import com.neyma.serviceoffer.dao.util.MongoDbUtil;
 import com.neyma.serviceoffer.domain.Offer;
 import com.neyma.serviceoffer.domain.Offer.OfferBuilder;
 
 @Service
-public class OfferMongoDbRepository extends AbstractMongoDbRepository {
-	
-	public Offer save(Offer offer) {
+public class OfferMongoDbRepository extends AbstractMongoDbRepository 
+	implements IDbGetAllSupportAlteringRepository<OfferRequest, OfferResponse> {
+
+	@Override
+	public OfferResponse save(OfferRequest req) {
 		
-		if (offer == null) {
-			throw new IllegalArgumentException("offer can't be null!");
+		if (req.isOfferEmpty()) {
+			throw new IllegalArgumentException("Offer can't be empty!");
 		}
 		
 		String timeStamp = new SimpleDateFormat(env.getProperty("db.timestamp")).format(new Date());
-		String offerId = offer.getUserId() + timeStamp + Math.random();
+		String offerId = req.getOfferRequestObject().getUserId() + timeStamp + Math.random();
 		
-		Offer setupOffer = new OfferBuilder(offer)
+		Offer setupOffer = new OfferBuilder(req.getOfferRequestObject())
 				.withCreationTime(timeStamp)
 				.withLastUpdatedTime(timeStamp)
 				.withDbId(offerId)
@@ -34,36 +40,54 @@ public class OfferMongoDbRepository extends AbstractMongoDbRepository {
 	    Document doc = MongoDbUtil.convertObjectToDocument(setupOffer);
 	    db.getCollection(env.getProperty("db.offertable")).insertOne(doc);
 		
-		return offer;
+		return new OfferResponseBuilder()
+				.withOffer(setupOffer)
+				.build();
 	}
-	
-	public Offer get(String offerId) {
+
+	@Override
+	public OfferResponse update(OfferRequest req) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OfferResponse get(OfferRequest req) {
 		
-		FindIterable<Document> offers = findDocument("db.offertable", "_id", offerId);
+		if (req.isOfferIdEmpty()) {
+			throw new IllegalArgumentException("OfferId can't be empty!");
+		}
+		
+		FindIterable<Document> offers = findDocument("db.offertable", "_id", req.getOfferId());
 		
 		Document offer = offers.first();
 		
 		if (offer == null) {
-			throw new IllegalArgumentException("No offer returned!");
+			return new OfferResponseBuilder().build();
 		}
 		
-		return conversionService.convert(offer, Offer.class);
+		return new OfferResponseBuilder()
+				.withOffer(conversionService.convert(offer, Offer.class))
+				.build();
 	}
-	
-	public Offer update(Offer offer) {
-		throw new UnsupportedOperationException();
-	}
-	
-	public List<String> getOfferListForUser(String userId) {
+
+	@Override
+	public OfferResponse getAll(OfferRequest req) {
 		
-		FindIterable<Document> offers = findDocument("db.offertable", "userId", userId);
+		if (req.isUserIdEmpty()) {
+			throw new IllegalArgumentException("UserId can't be empty!");
+		}
+		
+		FindIterable<Document> offers = findDocument("db.offertable", "userId", req.getUserId());
 		
 		List<String> offerIds = new ArrayList<>();
 		for (Document doc : offers){
 			offerIds.add(doc.getString("_id"));
 		}
 		
-		return offerIds;
+		return new OfferResponseBuilder()
+				.withOfferIdList(offerIds)
+				.build();
 	}
 	
 }
