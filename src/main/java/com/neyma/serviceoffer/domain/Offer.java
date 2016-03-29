@@ -48,9 +48,9 @@ public class Offer {
 			this.title = offer.title;
 			this.description = offer.description;
 			this.cityId = offer.cityId;
-			this._id = EMPTY_STRING;
-			this.creationTime = EMPTY_STRING;
-			this.lastUpdateTime = EMPTY_STRING;
+			this._id = offer._id;
+			this.creationTime = offer.creationTime;
+			this.lastUpdateTime = offer.lastUpdateTime;
 		}
 		
 		public OfferBuilder withDbId(String id) {

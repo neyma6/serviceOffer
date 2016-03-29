@@ -47,8 +47,34 @@ public class OfferMongoDbRepository extends AbstractMongoDbRepository
 
 	@Override
 	public OfferResponse update(OfferRequest req) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (req.isOfferEmpty()) {
+			throw new IllegalArgumentException("Offer can't be empty!");
+		}
+		
+		if (req.isOfferIdEmpty()) {
+			throw new IllegalArgumentException("OfferId can't be empty!");
+		}
+		
+		OfferResponse checkResponse = get(req);
+		
+		if (checkResponse.getOfferResponseObject() == Offer.EMPTY_OFFER) {
+			throw new IllegalStateException("Cannot update because the entry is not exist!");
+		}
+		
+		String timeStamp = new SimpleDateFormat(env.getProperty("db.timestamp")).format(new Date());
+		
+		Offer setupOffer = new OfferBuilder(req.getOfferRequestObject())
+				.withLastUpdatedTime(timeStamp)
+				.build();
+		
+		Document doc = MongoDbUtil.convertObjectToDocument(setupOffer);
+	    db.getCollection(env.getProperty("db.offertable"))
+	    	.replaceOne(new Document("_id", req.getOfferRequestObject().get_id()), doc);
+		
+		return new OfferResponseBuilder()
+				.withOffer(setupOffer)
+				.build();
 	}
 
 	@Override
