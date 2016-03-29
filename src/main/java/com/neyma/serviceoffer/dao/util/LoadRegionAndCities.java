@@ -2,7 +2,8 @@ package com.neyma.serviceoffer.dao.util;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -18,7 +19,8 @@ public class LoadRegionAndCities {
 		
 		Map<String, Set<String>> regionsAndCities = new TreeMap<>();
 		
-		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), "UTF-8"))) {
 			
 			String line;
 			while ((line = reader.readLine()) != null) {
