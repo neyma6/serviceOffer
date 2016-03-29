@@ -13,7 +13,6 @@ import com.neyma.serviceoffer.dao.db.LocationResponse;
 import com.neyma.serviceoffer.dao.db.RegionRequest;
 import com.neyma.serviceoffer.domain.City;
 import com.neyma.serviceoffer.domain.Region;
-import com.neyma.serviceoffer.presenter.RegionResultPresenter;
 
 @Service
 public class RegionAwareFacade {
@@ -25,12 +24,6 @@ public class RegionAwareFacade {
 	@Autowired
 	@Qualifier(ProjectConfiguration.CITY_REPOSITORY)
 	private IPermanentRepository<CityRequest, LocationResponse<City>> cityRepository;
-	
-	public RegionResultPresenter loadRegionsIntoDb() {
-		
-		
-		return null;
-	}
 	
 	public List<Region> getRegions() {
 		return regionRepository.getAll(RegionRequest.EMPTY_REQUEST).getItems();

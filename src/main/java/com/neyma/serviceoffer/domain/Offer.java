@@ -2,6 +2,10 @@ package com.neyma.serviceoffer.domain;
 
 public class Offer {
 
+	private static final String EMPTY_STRING = "";
+	public static final Offer EMPTY_OFFER = 
+			new OfferBuilder(EMPTY_STRING, EMPTY_STRING ,EMPTY_STRING ,EMPTY_STRING).build();
+	
 	private final String userId;
 	private final String title;
 	private final String description;
@@ -9,37 +13,64 @@ public class Offer {
 	private String _id;
 	private String creationTime;
 	private String lastUpdateTime;
+			
+	private Offer(OfferBuilder builder) {
+		userId = builder.userId;
+		title = builder.title;
+		description = builder.description;
+		cityId = builder.cityId;
+		_id = builder._id;
+		creationTime = builder.creationTime;
+		lastUpdateTime = builder.lastUpdateTime;
+	}
+	
+	public static class OfferBuilder {
+		private String userId;
+		private String title;
+		private String description;
+		private String cityId;
+		private String _id;
+		private String creationTime;
+		private String lastUpdateTime;
 		
-	public Offer(String userId, String title, String description, String cityId) {
-		super();
-		this.userId = userId;
-		this.title = title;
-		this.description = description;
-		this.cityId = cityId;
-	}
-
-	public String get_id() {
-		return _id;
-	}
-
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-
-	public String getCreationTime() {
-		return creationTime;
-	}
-
-	public void setCreationTime(String creationTime) {
-		this.creationTime = creationTime;
-	}
-
-	public String getLastUpdateTime() {
-		return lastUpdateTime;
-	}
-
-	public void setLastUpdateTime(String lastUpdateTime) {
-		this.lastUpdateTime = lastUpdateTime;
+		public OfferBuilder(String userId, String title, String description, String cityId) {
+			this.userId = userId;
+			this.title = title;
+			this.description = description;
+			this.cityId = cityId;
+			this._id = EMPTY_STRING;
+			this.creationTime = EMPTY_STRING;
+			this.lastUpdateTime = EMPTY_STRING;
+		}
+		
+		public OfferBuilder(Offer offer) {
+			this.userId = offer.userId;
+			this.title = offer.title;
+			this.description = offer.description;
+			this.cityId = offer.cityId;
+			this._id = EMPTY_STRING;
+			this.creationTime = EMPTY_STRING;
+			this.lastUpdateTime = EMPTY_STRING;
+		}
+		
+		public OfferBuilder withDbId(String id) {
+			_id = id;
+			return this;
+		}
+		
+		public OfferBuilder withCreationTime(String time) {
+			creationTime = time;
+			return this;
+		}
+		
+		public OfferBuilder withLastUpdatedTime(String time) {
+			lastUpdateTime = time;
+			return this;
+		}
+		
+		public Offer build() {
+			return new Offer(this);
+		}
 	}
 
 	public String getUserId() {
@@ -53,11 +84,24 @@ public class Offer {
 	public String getDescription() {
 		return description;
 	}
-	
 
 	public String getCityId() {
 		return cityId;
 	}
+
+	public String get_id() {
+		return _id;
+	}
+
+	public String getCreationTime() {
+		return creationTime;
+	}
+
+	public String getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+
+
 
 	@Override
 	public String toString() {

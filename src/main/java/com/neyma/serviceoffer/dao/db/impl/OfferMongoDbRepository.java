@@ -6,33 +6,32 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.Document;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoDatabase;
-import com.neyma.serviceoffer.config.ProjectConfiguration;
 import com.neyma.serviceoffer.dao.util.MongoDbUtil;
 import com.neyma.serviceoffer.domain.Offer;
+import com.neyma.serviceoffer.domain.Offer.OfferBuilder;
 
 @Service
 public class OfferMongoDbRepository extends AbstractMongoDbRepository {
 	
 	public Offer save(Offer offer) {
 		
+		if (offer == null) {
+			throw new IllegalArgumentException("offer can't be null!");
+		}
+		
 		String timeStamp = new SimpleDateFormat(env.getProperty("db.timestamp")).format(new Date());
 		String offerId = offer.getUserId() + timeStamp + Math.random();
 		
-		offer.setCreationTime(timeStamp);
-		offer.setLastUpdateTime(timeStamp);
-		offer.set_id(offerId);
+		Offer setupOffer = new OfferBuilder(offer)
+				.withCreationTime(timeStamp)
+				.withLastUpdatedTime(timeStamp)
+				.withDbId(offerId)
+				.build();
 		
-	    Document doc = MongoDbUtil.convertObjectToDocument(offer);
+	    Document doc = MongoDbUtil.convertObjectToDocument(setupOffer);
 	    db.getCollection(env.getProperty("db.offertable")).insertOne(doc);
 		
 		return offer;
